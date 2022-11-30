@@ -1,15 +1,21 @@
-import {useState} from "react" ; 
+import {useState , useEffect } from "react" ; 
 import './Counter.css';
 
 function Counter(props) {
-    const {delta} = props
+    const {delta , Max , getReset , needToReset} = props
     const [count, setCount] = useState(1)
-    const {Max} = props
 
+  useEffect( ( ) => {
+      if(needToReset){
+        setCount(0)
+        getReset(false)
+      }
+   } ,[needToReset , getReset] ) //the getReset donr necessary his for remove the Wornning in the terminal
+    
     function incr() {
         setCount(
             function(oldCount){
-              if ( oldCount >= Max ) {
+              if ( oldCount + delta >= Max ) {
                 return 0 }
               return oldCount + delta
             }
@@ -18,6 +24,7 @@ function Counter(props) {
     }
 
     function Reset() {
+        getReset(true)
         setCount(0) 
           }
 
